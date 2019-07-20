@@ -6,7 +6,7 @@ import GlobalStyle from './global';
 function App() {
   return (
     <>
-      <Routes />;
+      <Routes />
       <GlobalStyle />
     </>
   );
