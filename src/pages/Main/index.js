@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 
-import { Container, Form, SubmitButton } from './styles';
+import { Container, Form, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
   state = {
@@ -13,7 +13,7 @@ export default class Main extends Component {
 
   handleInputChange = e => {
     this.setState({ newRepo: e.target.value });
-  }
+  };
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -26,11 +26,17 @@ export default class Main extends Component {
       name: response.data.full_name,
     };
 
-    this.setState({ repositories: [ ...repositories, data], newRepo: '', loading: false })
-  }
+    this.setState({
+      repositories: [...repositories, data],
+      newRepo: '',
+      loading: false,
+    });
+  };
 
   render() {
-    const { newRepo, loading } = this.state;
+    const { newRepo, loading, repositories } = this.state;
+    console.log(repositories);
+
     return (
       <Container>
         <h1>
@@ -45,9 +51,22 @@ export default class Main extends Component {
             onChange={this.handleInputChange}
           />
           <SubmitButton disable loading={loading}>
-            {  loading ? <FaSpinner color={'#fff'} size={14} /> : <FaPlus color="#fff" size={14} /> }
+            {loading ? (
+              <FaSpinner color="#fff" size={14} />
+            ) : (
+              <FaPlus color="#fff" size={14} />
+            )}
           </SubmitButton>
         </Form>
+
+        <List>
+          {repositories.map(repository => (
+            <li key={repository.name}>
+              <span>{repository.name}</span>
+              <a href="">Detalhes</a>
+            </li>
+          ))}
+        </List>
       </Container>
     );
   }
