@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
+import Container from '../../components/Container';
+import { Loading, Owner } from './styles';
+
 export default class Repository extends Component {
   static propTypes = {
     match: PropTypes.shape({
@@ -22,7 +25,7 @@ export default class Repository extends Component {
 
     const repoName = decodeURIComponent(match.params.repository);
 
-    const response = axios.get(`https://api.github.com/repos/${repoName}`);
+    const repository = axios.get(`https://api.github.com/repos/${repoName}`);
     const issues = axios.get(
       `https://api.github.com/repos/${repoName}/issues`,
       {
@@ -33,9 +36,9 @@ export default class Repository extends Component {
       }
     );
 
-    await Promise.all([response, issues]).then(() => {
-      console.log(response);
-      console.log(issues);
+    await Promise.all([repository, issues]).then(() => {
+      console.log('repository', repository);
+      console.log('issues', issues);
     });
 
     this.setState({
@@ -48,6 +51,22 @@ export default class Repository extends Component {
   render() {
     const { repository, issues, loading } = this.state;
 
-    return <h1>Repository:</h1>;
+    console.log('repository', repository);
+    console.log('issues', issues);
+
+    if (loading) {
+      return <Loading>Carregando</Loading>;
+    }
+
+    return (
+      <Container>
+        <Owner>
+          {/* <img src={repository.owner.avatar_url} alt={repository.owner.login} /> */}
+
+          {/* <h1>{repository.name}</h1>
+          <p>{repository.description}</p> */}
+        </Owner>
+      </Container>
+    );
   }
 }
