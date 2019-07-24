@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import baseURL from '../../services/api';
 
 import Container from '../../components/Container';
@@ -41,25 +41,23 @@ export default class Repository extends Component {
       issues: issues.data,
       loading: false,
     });
-
-    console.log(repository);
-    console.log(issues);
   }
 
   render() {
     const { repository, issues, loading } = this.state;
 
-    // if (loading) {
-    //   return <Loading>Carregando</Loading>;
-    // }
+    if (loading) {
+      return <Loading>Carregando ...</Loading>;
+    }
 
     return (
       <Container>
         <Owner>
-          {/* <img src={repository.owner.avatar_url} alt={repository.owner.login} /> */}
+          <Link to="/">Voltar aos repositórios</Link>
+          <img src={repository.owner.avatar_url} alt={repository.owner.login} />
 
-          {/* <h1>{repository.name}</h1>
-          <p>{repository.description}</p> */}
+          <h1>{repository.name}</h1>
+          <p>{repository.description}</p>
         </Owner>
       </Container>
     );
