@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import baseURL from '../../services/api';
 
 import Container from '../../components/Container';
 import { Loading, Owner } from './styles';
@@ -25,38 +26,32 @@ export default class Repository extends Component {
 
     const repoName = decodeURIComponent(match.params.repository);
 
-    const repository = axios.get(`https://api.github.com/repos/${repoName}`);
-    const issues = axios.get(
-      `https://api.github.com/repos/${repoName}/issues`,
-      {
+    const [repository, issues] = await Promise.all([
+      baseURL.get(`/repos/${repoName}`),
+      baseURL.get(`/repos/${repoName}/issues`, {
         params: {
           state: 'open',
           per_page: 5,
         },
-      }
-    );
-
-    await Promise.all([repository, issues]).then(() => {
-      console.log('repository', repository);
-      console.log('issues', issues);
-    });
+      }),
+    ]);
 
     this.setState({
       repository: repository.data,
       issues: issues.data,
       loading: false,
     });
+
+    console.log(repository);
+    console.log(issues);
   }
 
   render() {
     const { repository, issues, loading } = this.state;
 
-    console.log('repository', repository);
-    console.log('issues', issues);
-
-    if (loading) {
-      return <Loading>Carregando</Loading>;
-    }
+    // if (loading) {
+    //   return <Loading>Carregando</Loading>;
+    // }
 
     return (
       <Container>
